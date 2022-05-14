@@ -12,6 +12,6 @@ namespace EmployeeManagement.Models
         public int Age { get; set; }
         public string PhoneNumber { get; set; }
 
-        public List<Department> Departments { get; set; }
+        public ICollection<Department> Departments { get; set; }
     }
 }

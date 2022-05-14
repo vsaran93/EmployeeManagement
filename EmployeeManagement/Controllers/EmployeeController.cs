@@ -42,5 +42,42 @@ namespace EmployeeManagement.Controllers
 
             return Ok(employee);
         }
+
+        // POST: api/employee
+        [HttpPost]
+        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
+        {
+            var newEmployee = new Employee
+            {
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                Age = employee.Age,
+                PhoneNumber = employee.PhoneNumber
+            };
+
+            _context.Employees.Add(newEmployee);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        // Delete: api/employee/2
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            _context.Employees.Remove(employee);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }

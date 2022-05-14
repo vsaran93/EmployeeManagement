@@ -18,6 +18,21 @@ namespace EmployeeManagement.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DepartmentEmployee", b =>
+                {
+                    b.Property<int>("DepartmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DepartmentsId", "EmployeesId");
+
+                    b.HasIndex("EmployeesId");
+
+                    b.ToTable("DepartmentEmployee");
+                });
+
             modelBuilder.Entity("EmployeeManagement.Models.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -25,15 +40,10 @@ namespace EmployeeManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Departments");
                 });
@@ -65,18 +75,19 @@ namespace EmployeeManagement.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("EmployeeManagement.Models.Department", b =>
+            modelBuilder.Entity("DepartmentEmployee", b =>
                 {
-                    b.HasOne("EmployeeManagement.Models.Employee", null)
-                        .WithMany("Departments")
-                        .HasForeignKey("EmployeeId")
+                    b.HasOne("EmployeeManagement.Models.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("EmployeeManagement.Models.Employee", b =>
-                {
-                    b.Navigation("Departments");
+                    b.HasOne("EmployeeManagement.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
