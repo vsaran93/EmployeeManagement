@@ -13,7 +13,7 @@ namespace EmployeeManagement.Controllers
     [ApiController]
     public class DepartmentController : Controller
     {
-        protected readonly EmployeeManagementContext _context;
+        private readonly EmployeeManagementContext _context;
         public DepartmentController(EmployeeManagementContext context)
         {
             _context = context;
@@ -31,6 +31,21 @@ namespace EmployeeManagement.Controllers
             }
 
             return Ok(department);
+        }
+
+        //POST: api/department
+        [HttpPost]
+        public async Task<ActionResult<Department>> Create(Department department)
+        {
+            var newDepartment = new Department
+            {
+                Name = department.Name
+            };
+
+            _context.Departments.Add(newDepartment);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

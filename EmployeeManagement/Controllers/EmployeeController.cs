@@ -24,7 +24,7 @@ namespace EmployeeManagement.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
         {
-            var employees = await _context.Employees.ToListAsync();
+            var employees = await _context.Employees.Include(employee => employee.Departments).ToListAsync();
 
             return Ok(employees);
         }
@@ -45,15 +45,17 @@ namespace EmployeeManagement.Controllers
 
         // POST: api/employee
         [HttpPost]
-        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
+        public async Task<ActionResult<Employee>> CreateEmployee(EmployeeDTO employee)
         {
+            ICollection<Department> departments = _context.Departments.Where(x => employee.Departments.Contains(x.Id)).ToList();
             var newEmployee = new Employee
             {
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email,
                 Age = employee.Age,
-                PhoneNumber = employee.PhoneNumber
+                PhoneNumber = employee.PhoneNumber,
+                Departments = departments
             };
 
             _context.Employees.Add(newEmployee);
